@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Autoridad</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/actas}">Sistema de Actas</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/actas}">
+                        📋 Ver Historial de Actas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/autoridades}">👮 Autoridades</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/infracciones}">⛔ Infracciones</a>
+                </li>
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-primary btn-sm text-white active" th:href="@{/actas/crear}">
+                        ➕ Nueva Acta
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4">Registrar Nueva Autoridad</h2>
+
+            <form th:action="@{/autoridades/guardar}" method="POST" class="bg-white p-4 shadow-sm rounded needs-validation" novalidate>
+
+                <h5 class="text-primary border-bottom pb-2 mb-3">Datos Personales</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Nombre *</label>
+                        <input type="text" class="form-control" name="nombre"
+                               pattern="^[a-zA-ZÀ-ÿ\s]+$"
+                               oninput="this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '')"
+                               required>
+                        <div class="invalid-feedback">Ingrese un nombre válido (solo letras).</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Apellido *</label>
+                        <input type="text" class="form-control" name="apellido"
+                               pattern="^[a-zA-ZÀ-ÿ\s]+$"
+                               oninput="this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '')"
+                               required>
+                        <div class="invalid-feedback">Ingrese un apellido válido (solo letras).</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">DNI *</label>
+                        <input type="text" class="form-control" name="dni" pattern="^[0-9]{7,9}$" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                        <div class="invalid-feedback">Ingrese un DNI válido.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Género *</label>
+                        <select class="form-select" name="genero" required>
+                            <option value="" disabled selected>-- Seleccione --</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="X">Otro</option>
+                        </select>
+                        <div class="invalid-feedback">Seleccione un género.</div>
+                    </div>
+                </div>
+
+                <h5 class="text-primary border-bottom pb-2 mb-3">Datos Institucionales</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Nº de Legajo *</label>
+                        <input type="number" class="form-control" name="idLegajo" min="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                        <div class="invalid-feedback">Ingrese el número de legajo.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Nº de Placa *</label>
+                        <input type="number" class="form-control" name="idPlaca" min="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                        <div class="invalid-feedback">Ingrese el número de placa.</div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <a th:href="@{/autoridades}" class="btn btn-outline-secondary me-2">Cancelar</a>
+                    <button type="submit" class="btn btn-success">Guardar Autoridad</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

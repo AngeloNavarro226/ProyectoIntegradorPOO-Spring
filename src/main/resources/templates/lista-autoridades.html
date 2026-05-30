@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Autoridades</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/actas}">Sistema de Actas</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/actas}">
+                        📋 Ver Historial de Actas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/autoridades}">👮 Autoridades</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/infracciones}">⛔ Infracciones</a>
+                </li>
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-primary btn-sm text-white active" th:href="@{/actas/crear}">
+                        ➕ Nueva Acta
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container pb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Autoridades de Constatación</h2>
+        <a th:href="@{/autoridades/crear}" class="btn btn-primary">+ Nueva Autoridad</a>
+    </div>
+
+    <div class="table-responsive bg-white shadow-sm rounded p-3">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre y Apellido</th>
+                <th>DNI</th>
+                <th>Género</th>
+                <th>Nº Legajo</th>
+                <th>Nº Placa</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="aut : ${autoridades}">
+                <td th:text="${aut.id}"></td>
+                <td th:text="${aut.nombre + ' ' + aut.apellido}"></td>
+                <td th:text="${aut.dni}"></td>
+                <td th:text="${aut.genero}"></td>
+                <td th:text="${aut.idLegajo}"></td>
+                <td th:text="${aut.idPlaca}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(autoridades)}">
+                <td colspan="6" class="text-center text-muted py-3">No hay autoridades registradas.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Acta de Constatación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/actas}">Sistema de Actas</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/actas}">
+                        📋 Ver Historial de Actas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/autoridades}">👮 Autoridades</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/infracciones}">⛔ Infracciones</a>
+                </li>
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-primary btn-sm text-white active" th:href="@{/actas/crear}">
+                        ➕ Nueva Acta
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container pb-5">
+    <h2 class="mb-4">Nueva Acta de Constatación</h2>
+
+    <form th:action="@{/actas/guardar}" method="POST" class="bg-white p-4 shadow-sm rounded needs-validation" novalidate>
+
+        <h5 class="text-primary border-bottom pb-2">Fecha y Lugar</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Fecha *</label>
+                <input type="date" class="form-control" id="inputFecha" name="fecha" required>
+                <div class="invalid-feedback">Seleccione la fecha del acta.</div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Hora *</label>
+                <input type="time" class="form-control" id="inputHora" name="hora" required>
+                <div class="invalid-feedback">Seleccione la hora.</div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Vencimiento</label>
+                <input type="date" class="form-control" id="inputVencimiento" name="fechaVencimiento" required>
+                <div class="invalid-feedback">Seleccione el vencimiento.</div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Lugar *</label>
+                <input type="text" class="form-control" name="lugar" placeholder="Ej: Acceso Este Km 10" required>
+                <div class="invalid-feedback">Indique el lugar de constatación.</div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h5 class="text-primary border-bottom pb-2">Infractor</h5>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" name="infractorNombre"
+                               pattern="^[a-zA-ZÀ-ÿ\s]+$"
+                               oninput="this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '')"
+                               required>
+                        <div class="invalid-feedback">Ingrese un nombre válido (solo letras).</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Apellido *</label>
+                        <input type="text" class="form-control" name="infractorApellido"
+                               pattern="^[a-zA-ZÀ-ÿ\s]+$"
+                               oninput="this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '')"
+                               required>
+                        <div class="invalid-feedback">Ingrese un apellido válido (solo letras).</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">DNI *</label>
+                        <input type="text" class="form-control" name="infractorDni" pattern="^[0-9]{7,9}$" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                        <div class="invalid-feedback">Ingrese un DNI válido (solo números).</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Género *</label>
+                        <select class="form-select" name="infractorGenero" required>
+                            <option value="" disabled selected>-- Seleccione --</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="X">Otro</option>
+                        </select>
+                        <div class="invalid-feedback">Seleccione un género.</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Domicilio</label>
+                        <input type="text" class="form-control" name="infractorDomicilio">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Vto. Licencia</label>
+                        <input type="date" class="form-control" name="infractorVtoLicencia">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Puntos Iniciales</label>
+                        <input type="number" class="form-control" name="infractorPuntos" min="0" max="20" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h5 class="text-primary border-bottom pb-2">Vehículo</h5>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Marca *</label>
+                        <input type="text" class="form-control" name="vehiculoMarca" required>
+                        <div class="invalid-feedback">Ingrese la marca del vehículo.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Modelo *</label>
+                        <input type="text" class="form-control" name="vehiculoModelo" required>
+                        <div class="invalid-feedback">Ingrese el modelo.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Dominio (Patente) *</label>
+                        <input type="text" class="form-control" name="vehiculoDominio" required>
+                        <div class="invalid-feedback">Ingrese la patente.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Color</label>
+                        <input type="text" class="form-control" name="vehiculoColor">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Año Patente</label>
+                        <input type="number" class="form-control" name="vehiculoAnio" min="1900" max="2100" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h5 class="text-primary border-bottom pb-2">Autoridad de Constatación</h5>
+                <label class="form-label fw-bold">Seleccione Autoridad *</label>
+                <select class="form-select" name="autoridadId" required>
+                    <option value="" disabled selected>-- Seleccione una Autoridad --</option>
+                    <option th:each="autoridad : ${autoridades}"
+                            th:value="${autoridad.id}"
+                            th:text="${autoridad.nombre + ' ' + autoridad.apellido}">
+                    </option>
+                </select>
+                <div class="invalid-feedback">Debe seleccionar una autoridad de la lista.</div>
+            </div>
+
+            <div class="col-md-6">
+                <h5 class="text-primary border-bottom pb-2">Infracciones</h5>
+
+                <div class="mb-2">
+                    <label class="form-label fw-bold">Ruta *</label>
+                    <input type="text" class="form-control" name="infraccionRuta" placeholder="Ej: Provincial 50" required>
+                    <div class="invalid-feedback">Debe especificar la ruta o calle de la infracción.</div>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label fw-bold">Seleccione Tipo de Infracción *</label>
+                    <select class="form-select" id="infraComboBox" name="infraccionId" required onchange="mostrarDescripcionInfraccion()">
+                        <option value="" disabled selected>-- Seleccione una Infracción --</option>
+                        <option th:each="inf : ${infracciones}"
+                                th:value="${inf.id}"
+                                th:data-descripcion="${inf.descipInfraccion}"
+                                th:text="${inf.descipInfraccion}">
+                        </option>
+                    </select>
+                    <div class="invalid-feedback">Debe seleccionar el tipo de infracción cometida.</div>
+                </div>
+
+                <div>
+                    <label class="form-label fw-bold">Detalle de la Infracción</label>
+                    <textarea class="form-control bg-light" id="infraTextArea" rows="4" readonly placeholder="La descripción detallada aparecerá aquí al seleccionar una infracción..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <a th:href="@{/actas}" class="btn btn-outline-secondary me-2">Cancelar</a>
+            <button type="submit" class="btn btn-success">Guardar Acta</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // AUTOCOMPLETAR FECHA Y HORA ACTUAL AL CARGAR LA PÁGINA
+    document.addEventListener('DOMContentLoaded', () => {
+        const ahora = new Date();
+
+        // Formatear Fecha (YYYY-MM-DD)
+        const año = ahora.getFullYear();
+        const mes = String(ahora.getMonth() + 1).padStart(2, '0');
+        const dia = String(ahora.getDate()).padStart(2, '0');
+        document.getElementById('inputFecha').value = `${año}-${mes}-${dia}`;
+
+        // Formatear Hora (HH:MM)
+        const horas = String(ahora.getHours()).padStart(2, '0');
+        const minutos = String(ahora.getMinutes()).padStart(2, '0');
+        document.getElementById('inputHora').value = `${horas}:${minutos}`;
+    });
+
+    // MOSTRAR DESCRIPCIÓN DE LA INFRACCIÓN
+    function mostrarDescripcionInfraccion() {
+        const combo = document.getElementById('infraComboBox');
+        const textArea = document.getElementById('infraTextArea');
+
+        if (combo.selectedIndex > 0) {
+            const opcionSeleccionada = combo.options[combo.selectedIndex];
+            const descripcion = opcionSeleccionada.getAttribute('data-descripcion');
+            textArea.value = descripcion ? descripcion : 'Sin descripción detallada.';
+        } else {
+            textArea.value = '';
+        }
+    }
+
+    // VALIDACIÓN VISUAL DE BOOTSTRAP ANTES DE ENVIAR
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

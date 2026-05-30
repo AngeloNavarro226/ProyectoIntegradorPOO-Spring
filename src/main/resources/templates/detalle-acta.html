@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle de Acta</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+  <div class="container">
+    <a class="navbar-brand fw-bold" th:href="@{/actas}">Sistema de Actas</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/actas}">
+            📋 Ver Historial de Actas
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/autoridades}">👮 Autoridades</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/infracciones}">⛔ Infracciones</a>
+        </li>
+        <li class="nav-item ms-lg-2">
+          <a class="btn btn-primary btn-sm text-white active" th:href="@{/actas/crear}">
+            ➕ Nueva Acta
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container pb-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Detalle de Acta Nº <span th:text="${acta.id}"></span></h2>
+    <a th:href="@{/actas}" class="btn btn-outline-secondary btn-sm">Volver al Listado</a>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white fw-bold">Datos del Acta</div>
+        <div class="card-body row">
+          <div class="col-md-3"><p class="mb-0"><strong>Fecha:</strong> <span th:text="${acta.fechaDeLabrado}"></span></p></div>
+          <div class="col-md-3"><p class="mb-0"><strong>Hora:</strong> <span th:text="${acta.horaDeLabrado}"></span></p></div>
+          <div class="col-md-3"><p class="mb-0"><strong>Vencimiento Pago:</strong> <span th:text="${acta.fechaVtoPagoVolun}"></span></p></div>
+          <div class="col-md-3"><p class="mb-0"><strong>Lugar:</strong> <span th:text="${acta.lugarDeConstatacion}"></span></p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-danger text-white fw-bold">Datos del Infractor</div>
+        <div class="card-body">
+          <p class="mb-2"><strong>Nombre y Apellido:</strong> <span th:text="${acta.licencia?.conductor?.nombre + ' ' + acta.licencia?.conductor?.apellido}"></span></p>
+          <p class="mb-2"><strong>DNI:</strong> <span th:text="${acta.licencia?.conductor?.dni}"></span></p>
+          <p class="mb-2"><strong>Vencimiento Licencia:</strong> <span th:text="${acta.licencia?.fechaDeVto}"></span></p>
+          <p class="mb-0"><strong>Puntos Iniciales:</strong> <span th:text="${acta.licencia?.puntosInicialesLicencia}"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-header bg-warning text-dark fw-bold">Vehículo Involucrado</div>
+        <div class="card-body">
+          <p class="mb-2"><strong>Dominio (Patente):</strong> <span th:text="${acta.vehiculo?.dominio}"></span></p>
+          <p class="mb-2"><strong>Color:</strong> <span th:text="${acta.vehiculo?.color}"></span></p>
+          <p class="mb-0"><strong>Año Patentamiento:</strong> <span th:text="${acta.vehiculo?.anioPatentamiento}"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white fw-bold">Liquidación de Acta</div>
+        <div class="card-body row g-4">
+
+          <div class="col-md-4 border-end">
+            <h6 class="text-secondary fw-bold border-bottom pb-2">Autoridad Constatante:</h6>
+            <p class="mb-2 mt-3"><strong>Nombre:</strong> <span th:text="${acta.autoridadConstatacion?.nombre + ' ' + acta.autoridadConstatacion?.apellido}"></span></p>
+            <p class="mb-0"><strong>Nº Placa:</strong> <span th:text="${acta.autoridadConstatacion?.idPlaca}"></span></p>
+
+            <h6 class="text-secondary fw-bold border-bottom pb-2 mt-4">Ubicación del Suceso:</h6>
+            <p class="mb-0 mt-3"><strong>Ruta/Calle:</strong> <span th:text="${acta.ruta?.nombreRuta}"></span></p>
+          </div>
+
+          <div class="col-md-8">
+            <h6 class="text-danger fw-bold border-bottom pb-2">Detalle de Cargos:</h6>
+
+            <ul class="list-group mt-3 shadow-sm">
+
+              <li th:each="inf : ${acta.infraccion}" class="list-group-item d-flex justify-content-between align-items-center py-3">
+                <div>
+                  <h6 class="mb-0 fw-bold text-dark" th:text="${inf.descipInfraccion}">Nombre de Infracción</h6>
+                </div>
+                <span class="fs-6 fw-semibold text-muted">$<span th:text="${inf.importedeInfraccion}">0.00</span></span>
+              </li>
+
+              <li class="list-group-item d-flex justify-content-between align-items-center bg-light py-3 border-top-0 border-2 border-danger">
+                <span class="fw-bold fs-5 text-dark">TOTAL A PAGAR</span>
+                <span class="fw-bold fs-4 text-danger">$<span th:text="${totalMonto}">0.00</span></span>
+              </li>
+
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
